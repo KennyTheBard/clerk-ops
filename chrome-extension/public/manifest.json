@@ -4,11 +4,21 @@
   "version": "1.0",
   "manifest_version": 3,
   "permissions": ["tabs", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
   "background": {
-    "serviceWorker": "serviceWorker.js"
+    "service_worker": "serviceWorker.js"
   },
   "action": {
     "default_title": "Click to view a popup",
     "default_popup": "popup.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["./content_scripts/messageListener.js"],
+      "exclude_matches": [
+        "http://localhost:4044/"
+      ]
+    }
+  ]
 }
