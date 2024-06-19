@@ -1,4 +1,4 @@
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
   const startElementPickerBtn = document.getElementById(
     "startElementPickerBtn"
   );
@@ -9,7 +9,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         lastFocusedWindow: true,
       })
       .then(([tab]) => {
-        chrome.tabs.sendMessage(tab.id, { action: "startElementPicker" });  
+        chrome.tabs.sendMessage(tab.id, { action: "startElementPicker" });
       });
   });
 });
