@@ -18,7 +18,7 @@ function onElementClick(event) {
   event.preventDefault();
   event.stopPropagation();
 
-  chrome.runtime.sendMessage({ action: 'elementPicked', content: event.target.innerText }, (response) => console.log(response));
+  chrome.runtime.sendMessage({ action: 'elementPicked', content: event.target.outerHTML });
 
   document.removeEventListener("click", onElementClick, true);
   document.removeEventListener("mouseover", onElementHover, true);
