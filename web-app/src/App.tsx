@@ -1,16 +1,13 @@
+import "@mantine/core/styles.css";
 import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
 import {
   AppShell,
-  createTheme,
   Group,
   MantineProvider,
   Title,
 } from "@mantine/core";
 import { LoaderPage } from "./pages/Loader";
-
-const theme = createTheme({
-  /** Your theme override here */
-});
+import { theme } from "./theme";
 
 const router = createBrowserRouter([
   {
