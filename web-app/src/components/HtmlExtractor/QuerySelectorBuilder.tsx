@@ -5,13 +5,15 @@ import {
   TextInput,
   Text,
   Button,
+  ActionIcon,
 } from "@mantine/core";
+import { IconX } from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
 
 const PADDING_SIZE = 40;
 
 type QuerySelectorBuilderProps = {
-    onChange: (value: string) => void;
+  onChange: (value: string) => void;
 };
 
 export const QuerySelectorBuilder = (props: QuerySelectorBuilderProps) => {
@@ -51,10 +53,29 @@ export const QuerySelectorBuilder = (props: QuerySelectorBuilderProps) => {
     [atoms]
   );
 
+  const deleteAtom = useCallback(
+    (index: number) => {
+      setAtoms((prev) => [
+        ...prev.slice(0, index),
+        ...prev.slice(index + 1, prev.length),
+      ]);
+    },
+    [atoms]
+  );
+
   return (
     <Container>
       {atoms.map((atom, index) => (
         <Group pl={index * PADDING_SIZE} pt={12} key={atom.key}>
+          <ActionIcon
+            variant="subtle"
+            size="lg"
+            radius="xl"
+            color="red"
+            onClick={() => deleteAtom(index)}
+          >
+            <IconX style={{ width: "80%", height: "80%" }} stroke={1.5} />
+          </ActionIcon>
           <Select
             variant="filled"
             disabled={index === 0}
@@ -92,7 +113,6 @@ export const QuerySelectorBuilder = (props: QuerySelectorBuilderProps) => {
             leftSectionWidth={60}
             leftSection={<Text c="dimmed">class =</Text>}
           />
-          {/* TODO: delete button */}
         </Group>
       ))}
       <Group pl={atoms.length * PADDING_SIZE} pt={12}>

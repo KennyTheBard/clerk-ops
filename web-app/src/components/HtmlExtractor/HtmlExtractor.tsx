@@ -1,4 +1,4 @@
-import { Card, Divider, Title } from "@mantine/core";
+import { Card, Code, Divider, Space, Switch, Title } from "@mantine/core";
 import { QuerySelectorBuilder } from "./QuerySelectorBuilder";
 import { useEffect, useState } from "react";
 import { HtmlExtractorFnProps } from "../../lib/buildHtmlExtractorFn";
@@ -12,11 +12,22 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
   const [rowsQuerySelector, setRowsQuerySelector] = useState<string>("");
   const [columnsQuerySelector, setColumnsQuerySelector] = useState<string>("");
 
+  const [headersStripHtml, setHeadersStripHtml] = useState<boolean>(false);
+  const [columnsStripHtml, setColumnsStripHtml] = useState<boolean>(false);
+
   useEffect(() => {
     props.setExtractorFnProps({
-      headersQuerySelector,
-      rowsQuerySelector,
-      columnsQuerySelector,
+      headers: {
+        querySelector: headersQuerySelector,
+        stripHtml: headersStripHtml,
+      },
+      rows: {
+        querySelector: rowsQuerySelector,
+      },
+      columns: {
+        querySelector: columnsQuerySelector,
+        stripHtml: columnsStripHtml,
+      },
     });
   }, [headersQuerySelector, rowsQuerySelector, columnsQuerySelector]);
 
@@ -29,18 +40,34 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
 
       <Card.Section p={20}>
         <Title order={3}>Headers</Title>
+        <Space pt={12}/>
+        <Code block>{headersQuerySelector}</Code>
+        <Switch
+            label="Strip HTML tags"
+            size="md"
+            onChange={(event) => setHeadersStripHtml(event.currentTarget.checked)}
+        />
         <QuerySelectorBuilder onChange={(value) => setHeadersQuerySelector(value)} />
       </Card.Section>
       <Divider />
 
       <Card.Section p={20}>
         <Title order={3}>Rows</Title>
+        <Space pt={12}/>
+        <Code block>{rowsQuerySelector}</Code>
         <QuerySelectorBuilder onChange={(value) => setRowsQuerySelector(value)} />
       </Card.Section>
       <Divider />
 
       <Card.Section p={20}>
         <Title order={3}>Columns</Title>
+        <Space pt={12}/>
+        <Code block>{columnsQuerySelector}</Code>
+        <Switch
+            label="Strip HTML tags"
+            size="md"
+            onChange={(event) => setColumnsStripHtml(event.currentTarget.checked)}
+        />
         <QuerySelectorBuilder onChange={(value) => setColumnsQuerySelector(value)} />
       </Card.Section>
     </Card>

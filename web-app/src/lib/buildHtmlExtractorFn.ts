@@ -1,38 +1,42 @@
 export type HtmlExtractorFnProps = {
-  headersQuerySelector: string;
-  rowsQuerySelector: string;
-  columnsQuerySelector: string;
+  headers: {
+    querySelector: string;
+    stripHtml: boolean;
+  };
+  rows: {
+    querySelector: string;
+  };
+  columns: {
+    querySelector: string;
+    stripHtml: boolean;
+  };
 };
 
 export type HtmlExtractorFnReturn = {
   headers: string[];
   rows: Record<string, string>[];
-}
+};
 
 export const buildHtmlExtractorFn =
-  ({
-    headersQuerySelector,
-    rowsQuerySelector,
-    columnsQuerySelector,
-  }: HtmlExtractorFnProps) =>
+  (props: HtmlExtractorFnProps) =>
   (content: string): HtmlExtractorFnReturn => {
     const parser = new DOMParser();
     const document = parser.parseFromString(content, "text/html");
-    const headers = getHeaders(document, headersQuerySelector);
+    const headers = getHeaders(document, props.headers);
 
-    if (!rowsQuerySelector || !columnsQuerySelector) {
+    if (!props.rows.querySelector || !props.columns.querySelector) {
       return {
         headers: [],
         rows: [],
       };
     }
     const rowElements = Array.from(
-      document.querySelectorAll(rowsQuerySelector)
+      document.querySelectorAll(props.rows.querySelector)
     );
     const rows = [];
     for (const rowElement of rowElements) {
       const valueElements = Array.from(
-        rowElement.querySelectorAll(columnsQuerySelector)
+        rowElement.querySelectorAll(props.columns.querySelector)
       );
       const row: Record<string, string> = {};
       for (const index in valueElements) {
@@ -40,7 +44,9 @@ export const buildHtmlExtractorFn =
           headers[index] = `field_${index + 1}`;
         }
         const fieldName = headers[index];
-        row[fieldName] = valueElements[index].innerHTML;
+        row[fieldName] = props.columns.stripHtml
+          ? valueElements[index].textContent ?? ""
+          : valueElements[index].innerHTML;
       }
       rows.push(row);
     }
@@ -52,13 +58,15 @@ export const buildHtmlExtractorFn =
 
 const getHeaders = (
   document: Document,
-  headersQuerySelector: string
+  headersProps: HtmlExtractorFnProps["headers"]
 ): string[] => {
-  if (!headersQuerySelector) {
+  if (!headersProps.querySelector) {
     return [];
   }
   const headerElements = Array.from(
-    document.querySelectorAll(headersQuerySelector)
+    document.querySelectorAll(headersProps.querySelector)
   );
-  return headerElements.map((e) => e.innerHTML);
+  return headerElements.map((e) =>
+    headersProps.stripHtml ? e.textContent ?? "" : e.innerHTML
+  );
 };
