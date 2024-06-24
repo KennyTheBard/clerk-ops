@@ -5,6 +5,7 @@ import {
   buildHtmlExtractorFn,
   HtmlExtractorFnProps,
 } from "../lib/buildHtmlExtractorFn";
+import { prettifyHtml } from "../lib/prettifyHtml";
 
 export const LoaderPage = () => {
   const ref = useRef<HTMLTextAreaElement | null>(null);
@@ -40,7 +41,17 @@ export const LoaderPage = () => {
   return (
     <Stack align="stretch" justify="center" gap="md">
       <Title order={3}>Load your data here</Title>
-      <Textarea id="clerk-ops-textarea-input" ref={ref} cols={120} rows={16} />
+      <Button
+      variant="outline"
+      onClick={async () => {
+        if (ref.current) {
+          ref.current.value = await prettifyHtml(ref.current.value);
+        }
+      }}
+      >
+        Prettify
+      </Button>
+      <Textarea id="clerk-ops-textarea-input" ref={ref} cols={120} rows={16} resize="vertical"/>
       <HtmlExtractor
         setExtractorFnProps={(props) => {
           setHtmlExtractorFnProps(props);
