@@ -40,35 +40,56 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
 
       <Card.Section p={20}>
         <Title order={3}>Headers</Title>
-        <Space pt={12}/>
-        <Code block>{headersQuerySelector}</Code>
+        <Space pt={12} />
+        {headersQuerySelector && (
+          <>
+            <Code block>{headersQuerySelector}</Code>
+            <Space pt={12} />
+          </>
+        )}
         <Switch
-            label="Strip HTML tags"
-            size="md"
-            onChange={(event) => setHeadersStripHtml(event.currentTarget.checked)}
+          label="Strip HTML tags"
+          size="md"
+          onChange={(event) => setHeadersStripHtml(event.currentTarget.checked)}
         />
-        <QuerySelectorBuilder onChange={(value) => setHeadersQuerySelector(value)} />
+        <QuerySelectorBuilder
+          onChange={(value) => setHeadersQuerySelector(value)}
+        />
       </Card.Section>
       <Divider />
 
       <Card.Section p={20}>
         <Title order={3}>Rows</Title>
-        <Space pt={12}/>
-        <Code block>{rowsQuerySelector}</Code>
-        <QuerySelectorBuilder onChange={(value) => setRowsQuerySelector(value)} />
+        <Space pt={12} />
+        {rowsQuerySelector && (
+          <>
+            <Code block>{rowsQuerySelector}</Code>
+            <Space pt={12} />
+          </>
+        )}
+        <QuerySelectorBuilder
+          onChange={(value) => setRowsQuerySelector(value)}
+        />
       </Card.Section>
       <Divider />
 
       <Card.Section p={20}>
         <Title order={3}>Columns</Title>
-        <Space pt={12}/>
-        <Code block>{columnsQuerySelector}</Code>
+        <Space pt={12} />
+        {columnsQuerySelector && (
+          <>
+            <Code block>{columnsQuerySelector}</Code>
+            <Space pt={12} />
+          </>
+        )}
         <Switch
-            label="Strip HTML tags"
-            size="md"
-            onChange={(event) => setColumnsStripHtml(event.currentTarget.checked)}
+          label="Strip HTML tags"
+          size="md"
+          onChange={(event) => setColumnsStripHtml(event.currentTarget.checked)}
         />
-        <QuerySelectorBuilder onChange={(value) => setColumnsQuerySelector(value)} />
+        <QuerySelectorBuilder
+          onChange={(value) => setColumnsQuerySelector(value)}
+        />
       </Card.Section>
     </Card>
   );
