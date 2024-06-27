@@ -1,16 +1,24 @@
-import { Card, Code, Divider, Space, Switch, Title } from "@mantine/core";
-import { QuerySelectorBuilder } from "./QuerySelectorBuilder";
+import {
+  Card,
+  Divider,
+  Space,
+  Switch,
+  Title,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 import { HtmlExtractorFnProps } from "../../lib/buildHtmlExtractorFn";
+import { QuerySelectorCodeBlock } from "./QuerySelectorCodeBlock";
+import { compileQuerySelectorString, QuerySelector } from "./QuerySelectorBuilder";
 
 export type HtmlExtractorProps = {
   setExtractorFnProps: (props: HtmlExtractorFnProps) => void;
 };
 
 export const HtmlExtractor = (props: HtmlExtractorProps) => {
-  const [headersQuerySelector, setHeadersQuerySelector] = useState<string>("");
-  const [rowsQuerySelector, setRowsQuerySelector] = useState<string>("");
-  const [columnsQuerySelector, setColumnsQuerySelector] = useState<string>("");
+  // TODO: rename columns to cells for clarity
+  const [headersQuerySelector, setHeadersQuerySelector] = useState<QuerySelector>([]);
+  const [rowsQuerySelector, setRowsQuerySelector] = useState<QuerySelector>([]);
+  const [columnsQuerySelector, setColumnsQuerySelector] = useState<QuerySelector>([]);
 
   const [headersStripHtml, setHeadersStripHtml] = useState<boolean>(false);
   const [entriesStripHtml, setEntriesStripHtml] = useState<boolean>(false);
@@ -21,13 +29,13 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
   useEffect(() => {
     props.setExtractorFnProps({
       headers: {
-        querySelector: headersQuerySelector,
+        querySelector: compileQuerySelectorString(headersQuerySelector),
         stripHtml: headersStripHtml,
         trimSpaces: headersTrimSpaces,
       },
       entries: {
-        rowsQuerySelector,
-        columnsQuerySelector,
+        rowsQuerySelector: compileQuerySelectorString(rowsQuerySelector),
+        columnsQuerySelector: compileQuerySelectorString(columnsQuerySelector),
         stripHtml: entriesStripHtml,
         trimSpaces: entriesTrimSpaces,
       },
@@ -52,12 +60,12 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
       <Card.Section p={20}>
         <Title order={3}>Headers</Title>
         <Space pt={12} />
-        {headersQuerySelector && (
-          <>
-            <Code block>{headersQuerySelector}</Code>
-            <Space pt={12} />
-          </>
-        )}
+        <QuerySelectorCodeBlock
+          modalTitle="Headers"
+          querySelector={headersQuerySelector}
+          setQuerySelector={setHeadersQuerySelector}
+        />
+        <Space pt={12} />
         <Switch
           label="Strip HTML tags"
           size="md"
@@ -71,9 +79,6 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
             setHeadersTrimSpaces(event.currentTarget.checked)
           }
         />
-        <QuerySelectorBuilder
-          onChange={(value) => setHeadersQuerySelector(value)}
-        />
       </Card.Section>
       <Divider />
 
@@ -81,26 +86,20 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
         <Title order={3}>Entries</Title>
         <Space pt={12} />
         <Title order={5}>Rows</Title>
-        {rowsQuerySelector && (
-          <>
-            <Code block>{rowsQuerySelector}</Code>
-            <Space pt={12} />
-          </>
-        )}
-        <QuerySelectorBuilder
-          onChange={(value) => setRowsQuerySelector(value)}
+        <QuerySelectorCodeBlock
+          modalTitle="Rows"
+          querySelector={rowsQuerySelector}
+          setQuerySelector={setRowsQuerySelector}
         />
+        <Space pt={12} />
         <Title order={5}>Columns</Title>
         <Space pt={12} />
-        {columnsQuerySelector && (
-          <>
-            <Code block>{columnsQuerySelector}</Code>
-            <Space pt={12} />
-          </>
-        )}
-        <QuerySelectorBuilder
-          onChange={(value) => setColumnsQuerySelector(value)}
+        <QuerySelectorCodeBlock
+          modalTitle="Columns"
+          querySelector={columnsQuerySelector}
+          setQuerySelector={setColumnsQuerySelector}
         />
+        <Space pt={12} />
         <Switch
           label="Strip HTML tags"
           size="md"

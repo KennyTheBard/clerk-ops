@@ -12,31 +12,16 @@ import { useCallback, useEffect, useState } from "react";
 
 const PADDING_SIZE = 40;
 
-type QuerySelectorBuilderProps = {
-  onChange: (value: string) => void;
+export type QuerySelectorBuilderProps = {
+  initialValue: QuerySelector;
+  onChange: (value: QuerySelector) => void;
 };
 
 export const QuerySelectorBuilder = (props: QuerySelectorBuilderProps) => {
-  const [atoms, setAtoms] = useState<QuerySelectorAtom[]>([]);
+  const [atoms, setAtoms] = useState<QuerySelector>(props.initialValue);
 
   useEffect(() => {
-    const querySelector = atoms
-      .reduce(
-        (acc, atom) =>
-          [
-            acc,
-            " ",
-            combinatorSymbolMap[atom.combinator ?? "descendant"],
-            " ",
-            atom.tag,
-            atom.id ? `#${atom.id}` : "",
-            atom.class ? `.${atom.class}` : "",
-          ].join(""),
-        ""
-      )
-      .replace(/\s+/g, " ")
-      .trim();
-    props.onChange(querySelector);
+    props.onChange(atoms);
   }, [atoms]);
 
   const updateAtom = useCallback(
@@ -81,7 +66,6 @@ export const QuerySelectorBuilder = (props: QuerySelectorBuilderProps) => {
             disabled={index === 0}
             value={atom.combinator}
             onChange={(value) => updateAtom(index, "combinator", value!)}
-            defaultValue="descendant"
             checkIconPosition="right"
             rightSection={<></>}
             w={35}
@@ -97,12 +81,14 @@ export const QuerySelectorBuilder = (props: QuerySelectorBuilderProps) => {
             variant="unstyled"
             placeholder="HTML Tag"
             onChange={(value) => updateAtom(index, "tag", value.target.value)}
+            value={atom.tag}
             leftSection={<Text c="dimmed">&lt;</Text>}
             rightSection={<Text c="dimmed">&gt;</Text>}
           />
           <TextInput
             variant="unstyled"
             onChange={(value) => updateAtom(index, "id", value.target.value)}
+            value={atom.id}
             leftSectionWidth={35}
             // w={100}
             leftSection={<Text c="dimmed">id =</Text>}
@@ -110,6 +96,7 @@ export const QuerySelectorBuilder = (props: QuerySelectorBuilderProps) => {
           <TextInput
             variant="unstyled"
             onChange={(value) => updateAtom(index, "class", value.target.value)}
+            value={atom.class}
             leftSectionWidth={60}
             leftSection={<Text c="dimmed">class =</Text>}
           />
@@ -134,23 +121,45 @@ export const QuerySelectorBuilder = (props: QuerySelectorBuilderProps) => {
   );
 };
 
-type Combinator =
+export type Combinator =
   | "descendant"
   | "child"
   | "adjacent-sibling"
   | "general-sibling";
 
-const combinatorSymbolMap: Record<Combinator, string> = {
+export const combinatorSymbolMap: Record<Combinator, string> = {
   descendant: "",
   child: ">",
   "adjacent-sibling": "+",
   "general-sibling": "~",
 };
 
-type QuerySelectorAtom = {
+export type QuerySelectorAtom = {
   key: string;
   combinator?: Combinator;
   tag: string;
   id?: string;
   class?: string;
 };
+
+export type QuerySelector = QuerySelectorAtom[];
+
+export const compileQuerySelectorString = (qa: QuerySelector): string => {
+  return qa
+    .reduce(
+      (acc, atom) =>
+        [
+          acc,
+          " ",
+          combinatorSymbolMap[atom.combinator ?? "descendant"],
+          " ",
+          atom.tag,
+          atom.id ? `#${atom.id}` : "",
+          atom.class ? `.${atom.class}` : "",
+        ].join(""),
+      ""
+    )
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
