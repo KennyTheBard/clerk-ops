@@ -13,23 +13,34 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
   const [columnsQuerySelector, setColumnsQuerySelector] = useState<string>("");
 
   const [headersStripHtml, setHeadersStripHtml] = useState<boolean>(false);
-  const [columnsStripHtml, setColumnsStripHtml] = useState<boolean>(false);
+  const [entriesStripHtml, setEntriesStripHtml] = useState<boolean>(false);
+
+  const [headersTrimSpaces, setHeadersTrimSpaces] = useState<boolean>(false);
+  const [entriesTrimSpaces, setEntriesTrimSpaces] = useState<boolean>(false);
 
   useEffect(() => {
     props.setExtractorFnProps({
       headers: {
         querySelector: headersQuerySelector,
         stripHtml: headersStripHtml,
+        trimSpaces: headersTrimSpaces,
       },
-      rows: {
-        querySelector: rowsQuerySelector,
-      },
-      columns: {
-        querySelector: columnsQuerySelector,
-        stripHtml: columnsStripHtml,
+      entries: {
+        rowsQuerySelector,
+        columnsQuerySelector,
+        stripHtml: entriesStripHtml,
+        trimSpaces: entriesTrimSpaces,
       },
     });
-  }, [headersQuerySelector, rowsQuerySelector, columnsQuerySelector]);
+  }, [
+    headersQuerySelector,
+    rowsQuerySelector,
+    columnsQuerySelector,
+    headersStripHtml,
+    entriesStripHtml,
+    headersTrimSpaces,
+    entriesTrimSpaces,
+  ]);
 
   return (
     <Card shadow="sm" radius="md" withBorder>
@@ -52,6 +63,14 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
           size="md"
           onChange={(event) => setHeadersStripHtml(event.currentTarget.checked)}
         />
+        <Space pt={8} />
+        <Switch
+          label="Trim spaces"
+          size="md"
+          onChange={(event) =>
+            setHeadersTrimSpaces(event.currentTarget.checked)
+          }
+        />
         <QuerySelectorBuilder
           onChange={(value) => setHeadersQuerySelector(value)}
         />
@@ -59,8 +78,9 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
       <Divider />
 
       <Card.Section p={20}>
-        <Title order={3}>Rows</Title>
+        <Title order={3}>Entries</Title>
         <Space pt={12} />
+        <Title order={5}>Rows</Title>
         {rowsQuerySelector && (
           <>
             <Code block>{rowsQuerySelector}</Code>
@@ -70,11 +90,7 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
         <QuerySelectorBuilder
           onChange={(value) => setRowsQuerySelector(value)}
         />
-      </Card.Section>
-      <Divider />
-
-      <Card.Section p={20}>
-        <Title order={3}>Columns</Title>
+        <Title order={5}>Columns</Title>
         <Space pt={12} />
         {columnsQuerySelector && (
           <>
@@ -82,15 +98,26 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
             <Space pt={12} />
           </>
         )}
-        <Switch
-          label="Strip HTML tags"
-          size="md"
-          onChange={(event) => setColumnsStripHtml(event.currentTarget.checked)}
-        />
         <QuerySelectorBuilder
           onChange={(value) => setColumnsQuerySelector(value)}
         />
+        <Switch
+          label="Strip HTML tags"
+          size="md"
+          onChange={(event) => setEntriesStripHtml(event.currentTarget.checked)}
+        />
+        <Space pt={8} />
+        <Switch
+          label="Trim spaces"
+          size="md"
+          onChange={(event) =>
+            setEntriesTrimSpaces(event.currentTarget.checked)
+          }
+        />
       </Card.Section>
+      <Divider />
+
+      <Card.Section p={20}></Card.Section>
     </Card>
   );
 };

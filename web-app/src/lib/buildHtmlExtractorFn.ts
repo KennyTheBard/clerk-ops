@@ -2,13 +2,13 @@ export type HtmlExtractorFnProps = {
   headers: {
     querySelector: string;
     stripHtml: boolean;
+    trimSpaces: boolean;
   };
-  rows: {
-    querySelector: string;
-  };
-  columns: {
-    querySelector: string;
+  entries: {
+    rowsQuerySelector: string;
+    columnsQuerySelector: string;
     stripHtml: boolean;
+    trimSpaces: boolean;
   };
 };
 
@@ -24,19 +24,22 @@ export const buildHtmlExtractorFn =
     const document = parser.parseFromString(content, "text/html");
     const headers = getHeaders(document, props.headers);
 
-    if (!props.rows.querySelector || !props.columns.querySelector) {
+    if (
+      !props.entries.rowsQuerySelector ||
+      !props.entries.columnsQuerySelector
+    ) {
       return {
         headers: [],
         rows: [],
       };
     }
     const rowElements = Array.from(
-      document.querySelectorAll(props.rows.querySelector)
+      document.querySelectorAll(props.entries.rowsQuerySelector)
     );
     const rows = [];
     for (const rowElement of rowElements) {
       const valueElements = Array.from(
-        rowElement.querySelectorAll(props.columns.querySelector)
+        rowElement.querySelectorAll(props.entries.columnsQuerySelector)
       );
       const row: Record<string, string> = {};
       for (const index in valueElements) {
@@ -44,9 +47,12 @@ export const buildHtmlExtractorFn =
           headers[index] = `field_${index + 1}`;
         }
         const fieldName = headers[index];
-        row[fieldName] = props.columns.stripHtml
+        row[fieldName] = props.entries.stripHtml
           ? valueElements[index].textContent ?? ""
           : valueElements[index].innerHTML;
+        if (props.entries.trimSpaces) {
+          row[fieldName] = trimSpaces(row[fieldName]);
+        }
       }
       rows.push(row);
     }
@@ -66,7 +72,9 @@ const getHeaders = (
   const headerElements = Array.from(
     document.querySelectorAll(headersProps.querySelector)
   );
-  return headerElements.map((e) =>
-    headersProps.stripHtml ? e.textContent ?? "" : e.innerHTML
-  );
+  return headerElements
+    .map((e) => (headersProps.stripHtml ? e.textContent ?? "" : e.innerHTML))
+    .map((e) => (headersProps.trimSpaces ? trimSpaces(e) : e));
 };
+
+const trimSpaces = (s: string): string => s.replace(/\s+/g, " ").trim();
