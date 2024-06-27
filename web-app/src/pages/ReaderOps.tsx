@@ -11,7 +11,7 @@ import { db } from "../db/init";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Id } from "../db/entries";
 
-export const LoaderPage = () => {
+export const ReaderOpsPage = () => {
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const [htmlExtractorFnProps, setHtmlExtractorFnProps] = useState<
     HtmlExtractorFnProps | undefined

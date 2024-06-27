@@ -6,8 +6,9 @@ import {
   MantineProvider,
   Title,
 } from "@mantine/core";
-import { LoaderPage } from "./pages/Loader";
 import { theme } from "./theme";
+import { ExploreOpsPage } from "./pages/ExploreOps";
+import { ReaderOpsPage } from "./pages/ReaderOps";
 
 const router = createBrowserRouter([
   {
@@ -20,9 +21,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "loader",
-    element: <LoaderPage />,
-  },
+    path: 'ops',
+    children: [
+      {
+        path: "read",
+        element: <ReaderOpsPage />,
+      },
+      {
+        path: "explore",
+        element: <ExploreOpsPage />,
+      },
+    ]
+  }
 ]);
 
 function App() {

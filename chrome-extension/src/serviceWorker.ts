@@ -1,7 +1,7 @@
 chrome.runtime.onMessage.addListener((extMsg, sender, extSendResponse) => {
   if (extMsg.action === "elementPicked") {
     return chrome.tabs
-      .create({ url: "http://localhost:4044/loader", active: false })
+      .create({ url: "http://localhost:4044/ops/read", active: false })
       .then((tab) => {
         console.log(tab);
         chrome.scripting.executeScript(
