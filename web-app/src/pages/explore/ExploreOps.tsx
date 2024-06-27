@@ -20,13 +20,11 @@ export const ExploreOpsPage = () => {
           </Accordion.Control>
           <Accordion.Panel>
             {rawSchemas?.map((schema) => {
-              const isSelected = schema.id === selectedRawSchemaId ;
+              const isSelected = schema.id === selectedRawSchemaId;
               return (
                 <Button
-                  variant={
-                    isSelected ? "light" : "subtle"
-                  }
-                  color = {isSelected ? 'blue' : 'gray'}
+                  variant={isSelected ? "light" : "subtle"}
+                  color={isSelected ? "blue" : "gray"}
                   fullWidth
                   onClick={() => setSelectedRawSchemaId(schema.id)}
                 >
