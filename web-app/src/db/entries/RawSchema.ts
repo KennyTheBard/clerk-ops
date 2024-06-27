@@ -4,9 +4,9 @@ export type RawSchema = {
   id: Id;
   name: string;
   createdAt: Date;
+  schema: Record<string, FieldSchema>;
   // TODO: uncomment and handle this after the basic flow is there
   // domain: string;
-  // schema: Record<string, FieldSchema>;
   // url: string;
 };
 

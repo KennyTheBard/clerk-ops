@@ -7,8 +7,8 @@ import {
   Title,
 } from "@mantine/core";
 import { theme } from "./theme";
-import { ExploreOpsPage } from "./pages/ExploreOps";
-import { ReaderOpsPage } from "./pages/ReaderOps";
+import { ExploreOpsPage } from "./pages/explore/ExploreOps";
+import { ReaderOpsPage } from "./pages/reader/ReaderOps";
 
 const router = createBrowserRouter([
   {

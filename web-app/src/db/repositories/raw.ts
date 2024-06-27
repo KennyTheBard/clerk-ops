@@ -1,11 +1,12 @@
 import { db } from "../init";
-import { Id, RawEntryDataType } from "../entries";
+import { FieldSchema, Id, RawEntryDataType } from "../entries";
 
-export const createRawSchema = (args: { name: string }): Promise<Id> => {
+export const createRawSchema = (args: { name: string, schema: Record<string, FieldSchema> }): Promise<Id> => {
   return db.rawSchemas.add({
     name: args.name,
     createdAt: new Date(),
-  });
+    schema: args.schema,
+});
 };
 
 export const insertBulkRawEntry = (args: {

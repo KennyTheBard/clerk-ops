@@ -7,7 +7,7 @@ export const db = new Dexie("ClerkOpsDatabase") as Dexie & {
 };
 
 db.version(1).stores({
-  rawSchemas: "++id, name, createdAt",
-  rawEntries: "++id, data, rawSchemaId, createdAt",
+  rawSchemas: "++id, name, createdAt, schema",
+  rawEntries: "++id, data, createdAt, rawSchemaId",
 });
 // append upgrades to newer versions here
