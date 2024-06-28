@@ -1,14 +1,12 @@
 import "@mantine/core/styles.css";
+import '@mantine/notifications/styles.css';
+
 import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
-import {
-  AppShell,
-  Group,
-  MantineProvider,
-  Title,
-} from "@mantine/core";
+import { AppShell, Group, MantineProvider, Title } from "@mantine/core";
 import { theme } from "./theme";
 import { ExploreOpsPage } from "./pages/explore/ExploreOps";
 import { ReaderOpsPage } from "./pages/reader/ReaderOps";
+import { Notifications } from '@mantine/notifications';
 
 const router = createBrowserRouter([
   {
@@ -21,7 +19,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: 'ops',
+    path: "ops",
     children: [
       {
         path: "read",
@@ -31,13 +29,14 @@ const router = createBrowserRouter([
         path: "explore",
         element: <ExploreOpsPage />,
       },
-    ]
-  }
+    ],
+  },
 ]);
 
 function App() {
   return (
     <MantineProvider theme={theme}>
+      <Notifications autoClose={5000}/>
       <AppShell header={{ height: 60 }} padding="md">
         <AppShell.Header>
           <Group h="100%" px="md">

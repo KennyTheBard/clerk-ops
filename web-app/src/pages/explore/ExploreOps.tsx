@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { db } from "../../db/init";
 import { Id } from "../../db/entries";
 import { RawEntriesTable } from "./tables/RawEntriesTable";
+import { RawActions } from "./actions/RawActions";
 
 export const ExploreOpsPage = () => {
   const rawSchemas = useLiveQuery(() => db.rawSchemas.toArray(), []);
@@ -43,11 +44,12 @@ export const ExploreOpsPage = () => {
       <AppShell.Navbar w={300}>{navbarContent}</AppShell.Navbar>
       <AppShell.Main pl={300} pt={20}>
         {selectedRawSchemaId !== undefined && (
-          <Tabs variant="outline" radius="md" defaultValue="gallery">
+          <Tabs radius="md" defaultValue="gallery">
             <Tabs.List pl={5}>
               <Tabs.Tab value="schema">Schema</Tabs.Tab>
               <Tabs.Tab value="entries">Entries</Tabs.Tab>
               <Tabs.Tab value="pipelines">Pipelines</Tabs.Tab>
+              <Tabs.Tab value="actions">Actions</Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value="schema">Schema</Tabs.Panel>
@@ -57,6 +59,9 @@ export const ExploreOpsPage = () => {
             </Tabs.Panel>
 
             <Tabs.Panel value="pipelines">Pipelines</Tabs.Panel>
+            <Tabs.Panel value="actions">
+              <RawActions />
+            </Tabs.Panel>
           </Tabs>
         )}
       </AppShell.Main>
