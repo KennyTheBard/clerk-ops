@@ -78,6 +78,8 @@ export const RawActions = () => {
             </Text>
           </Stack>
         </Group>
+        {/* TODO: merge option */}
+        {/* TODO: rename option */}
       </Stack>
     </Container>
   );

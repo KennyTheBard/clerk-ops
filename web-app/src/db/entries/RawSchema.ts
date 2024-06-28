@@ -11,7 +11,7 @@ export type RawSchema = {
 };
 
 
-export type FieldDataType = 'string' | 'number' | 'bool';
+export type FieldDataType = 'string' | 'number' | 'bool' | 'date';
 
 export type FieldSchema = {
   type: FieldDataType;

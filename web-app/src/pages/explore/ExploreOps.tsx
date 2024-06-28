@@ -1,47 +1,23 @@
-import { Accordion, AppShell, Button, Tabs } from "@mantine/core";
-import { useLiveQuery } from "dexie-react-hooks";
-import { useMemo, useState } from "react";
-import { db } from "../../db/init";
+import { AppShell, Tabs } from "@mantine/core";
+import { useState } from "react";
 import { Id } from "../../db/entries";
 import { RawEntriesTable } from "./tables/RawEntriesTable";
 import { RawActions } from "./actions/RawActions";
+import { ExploreOpsNavbar } from "./navbar/ExporeOpsNavbar";
 
 export const ExploreOpsPage = () => {
-  const rawSchemas = useLiveQuery(() => db.rawSchemas.toArray(), []);
   const [selectedRawSchemaId, setSelectedRawSchemaId] = useState<
     Id | undefined
   >();
 
-  const navbarContent = useMemo(() => {
-    return (
-      <Accordion transitionDuration={100} multiple={true}>
-        <Accordion.Item key="raw" value={"raw"}>
-          <Accordion.Control style={{ backgroundColor: "grey" }}>
-            Raw
-          </Accordion.Control>
-          <Accordion.Panel>
-            {rawSchemas?.map((schema) => {
-              const isSelected = schema.id === selectedRawSchemaId;
-              return (
-                <Button
-                  variant={isSelected ? "light" : "subtle"}
-                  color={isSelected ? "blue" : "gray"}
-                  fullWidth
-                  onClick={() => setSelectedRawSchemaId(schema.id)}
-                >
-                  {schema.name}
-                </Button>
-              );
-            })}
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
-    );
-  }, [rawSchemas, selectedRawSchemaId]);
-
   return (
     <AppShell>
-      <AppShell.Navbar w={300}>{navbarContent}</AppShell.Navbar>
+      <AppShell.Navbar w={300}>
+        <ExploreOpsNavbar
+          selectedRawSchemaId={selectedRawSchemaId}
+          selectSchemaId={setSelectedRawSchemaId}
+        />
+      </AppShell.Navbar>
       <AppShell.Main pl={300} pt={20}>
         {selectedRawSchemaId !== undefined && (
           <Tabs radius="md" defaultValue="gallery">
