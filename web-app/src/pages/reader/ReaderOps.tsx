@@ -62,7 +62,7 @@ export const ReaderOpsPage = () => {
   );
 
   return (
-    <Stack align="stretch" justify="center" gap="md">
+    <Stack align="center" justify="flex-start" gap="md">
       <Title order={3}>Load your data here</Title>
       <Button
         variant="outline"
