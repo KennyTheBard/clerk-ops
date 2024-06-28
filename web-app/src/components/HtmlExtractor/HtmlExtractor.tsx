@@ -15,10 +15,9 @@ export type HtmlExtractorProps = {
 };
 
 export const HtmlExtractor = (props: HtmlExtractorProps) => {
-  // TODO: rename columns to cells for clarity
   const [headersQuerySelector, setHeadersQuerySelector] = useState<QuerySelector>([]);
   const [rowsQuerySelector, setRowsQuerySelector] = useState<QuerySelector>([]);
-  const [columnsQuerySelector, setColumnsQuerySelector] = useState<QuerySelector>([]);
+  const [cellsQuerySelector, setCellsQuerySelector] = useState<QuerySelector>([]);
 
   const [headersStripHtml, setHeadersStripHtml] = useState<boolean>(false);
   const [entriesStripHtml, setEntriesStripHtml] = useState<boolean>(false);
@@ -35,7 +34,7 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
       },
       entries: {
         rowsQuerySelector: compileQuerySelectorString(rowsQuerySelector),
-        columnsQuerySelector: compileQuerySelectorString(columnsQuerySelector),
+        cellsQuerySelector: compileQuerySelectorString(cellsQuerySelector),
         stripHtml: entriesStripHtml,
         trimSpaces: entriesTrimSpaces,
       },
@@ -43,7 +42,7 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
   }, [
     headersQuerySelector,
     rowsQuerySelector,
-    columnsQuerySelector,
+    cellsQuerySelector,
     headersStripHtml,
     entriesStripHtml,
     headersTrimSpaces,
@@ -58,22 +57,23 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
       <Divider />
 
       <Card.Section p={20}>
-        <Title order={3}>Headers</Title>
-        <Space pt={12} />
+        <Title order={5}>Headers</Title>
+        <Space p={4}/>
         <QuerySelectorCodeBlock
           modalTitle="Headers"
           querySelector={headersQuerySelector}
           setQuerySelector={setHeadersQuerySelector}
         />
-        <Space pt={12} />
+
+        <Space pt={32} />
         <Switch
-          label="Strip HTML tags"
+          label="Strip HTML tags from headers"
           size="md"
           onChange={(event) => setHeadersStripHtml(event.currentTarget.checked)}
         />
         <Space pt={8} />
         <Switch
-          label="Trim spaces"
+          label="Trim spaces for headers"
           size="md"
           onChange={(event) =>
             setHeadersTrimSpaces(event.currentTarget.checked)
@@ -83,40 +83,38 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
       <Divider />
 
       <Card.Section p={20}>
-        <Title order={3}>Entries</Title>
-        <Space pt={12} />
         <Title order={5}>Rows</Title>
+        <Space p={4}/>
         <QuerySelectorCodeBlock
           modalTitle="Rows"
           querySelector={rowsQuerySelector}
           setQuerySelector={setRowsQuerySelector}
         />
         <Space pt={12} />
-        <Title order={5}>Columns</Title>
-        <Space pt={12} />
+
+        <Title order={5}>Cells</Title>
+        <Space p={4}/>
         <QuerySelectorCodeBlock
-          modalTitle="Columns"
-          querySelector={columnsQuerySelector}
-          setQuerySelector={setColumnsQuerySelector}
+          modalTitle="Cells"
+          querySelector={cellsQuerySelector}
+          setQuerySelector={setCellsQuerySelector}
         />
-        <Space pt={12} />
+        
+        <Space pt={32} />
         <Switch
-          label="Strip HTML tags"
+          label="Strip HTML tags from cells"
           size="md"
           onChange={(event) => setEntriesStripHtml(event.currentTarget.checked)}
         />
         <Space pt={8} />
         <Switch
-          label="Trim spaces"
+          label="Trim spaces from cells"
           size="md"
           onChange={(event) =>
             setEntriesTrimSpaces(event.currentTarget.checked)
           }
         />
       </Card.Section>
-      <Divider />
-
-      <Card.Section p={20}></Card.Section>
     </Card>
   );
 };

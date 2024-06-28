@@ -6,7 +6,7 @@ export type HtmlExtractorFnProps = {
   };
   entries: {
     rowsQuerySelector: string;
-    columnsQuerySelector: string;
+    cellsQuerySelector: string;
     stripHtml: boolean;
     trimSpaces: boolean;
   };
@@ -26,7 +26,7 @@ export const buildHtmlExtractorFn =
 
     if (
       !props.entries.rowsQuerySelector ||
-      !props.entries.columnsQuerySelector
+      !props.entries.cellsQuerySelector
     ) {
       return {
         headers: [],
@@ -39,7 +39,7 @@ export const buildHtmlExtractorFn =
     const rows = [];
     for (const rowElement of rowElements) {
       const valueElements = Array.from(
-        rowElement.querySelectorAll(props.entries.columnsQuerySelector)
+        rowElement.querySelectorAll(props.entries.cellsQuerySelector)
       );
       const row: Record<string, string> = {};
       for (const index in valueElements) {
