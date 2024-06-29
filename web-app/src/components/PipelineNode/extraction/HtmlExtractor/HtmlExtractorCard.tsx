@@ -1,23 +1,24 @@
-import {
-  Card,
-  Divider,
-  Space,
-  Switch,
-  Title,
-} from "@mantine/core";
+import { Divider, Space, Switch, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { HtmlExtractorFnProps } from "../../lib/buildHtmlExtractorFn";
+import { HtmlExtractorFnProps } from "../../../../lib/buildHtmlExtractorFn";
 import { QuerySelectorCodeBlock } from "./QuerySelectorCodeBlock";
-import { compileQuerySelectorString, QuerySelector } from "./QuerySelectorBuilder";
+import {
+  compileQuerySelectorString,
+  QuerySelector,
+} from "./QuerySelectorBuilder";
+import { PipelineNodeCard } from "../../PipelineNodeCard";
 
-export type HtmlExtractorProps = {
+export type HtmlExtractorCardProps = {
   setExtractorFnProps: (props: HtmlExtractorFnProps) => void;
 };
 
-export const HtmlExtractor = (props: HtmlExtractorProps) => {
-  const [headersQuerySelector, setHeadersQuerySelector] = useState<QuerySelector>([]);
+export const HtmlExtractorCard = (props: HtmlExtractorCardProps) => {
+  const [headersQuerySelector, setHeadersQuerySelector] =
+    useState<QuerySelector>([]);
   const [rowsQuerySelector, setRowsQuerySelector] = useState<QuerySelector>([]);
-  const [cellsQuerySelector, setCellsQuerySelector] = useState<QuerySelector>([]);
+  const [cellsQuerySelector, setCellsQuerySelector] = useState<QuerySelector>(
+    []
+  );
 
   const [headersStripHtml, setHeadersStripHtml] = useState<boolean>(false);
   const [entriesStripHtml, setEntriesStripHtml] = useState<boolean>(false);
@@ -50,22 +51,16 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
   ]);
 
   return (
-    <Card shadow="sm" radius="md" withBorder>
-      <Card.Section p={20} style={{ backgroundColor: "red" }}>
-        <Title order={2}>HTML Extractor</Title>
-      </Card.Section>
-      <Divider />
-
-      <Card.Section p={20}>
+    <PipelineNodeCard title="HTML Extractor" titleColor={"red"}>
         <Title order={5}>Headers</Title>
-        <Space p={4}/>
+        <Space p={4} />
         <QuerySelectorCodeBlock
           modalTitle="Headers"
           querySelector={headersQuerySelector}
           setQuerySelector={setHeadersQuerySelector}
         />
 
-        <Space pt={32} />
+        <Space pt={16} />
         <Switch
           label="Strip HTML tags from headers"
           size="md"
@@ -79,28 +74,28 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
             setHeadersTrimSpaces(event.currentTarget.checked)
           }
         />
-      </Card.Section>
-      <Divider />
+        <Space p={16} />
+        <Divider />
+        <Space p={8} />
 
-      <Card.Section p={20}>
         <Title order={5}>Rows</Title>
-        <Space p={4}/>
+        <Space p={4} />
         <QuerySelectorCodeBlock
           modalTitle="Rows"
           querySelector={rowsQuerySelector}
           setQuerySelector={setRowsQuerySelector}
         />
-        <Space pt={12} />
+        <Space pt={8} />
 
         <Title order={5}>Cells</Title>
-        <Space p={4}/>
+        <Space p={4} />
         <QuerySelectorCodeBlock
           modalTitle="Cells"
           querySelector={cellsQuerySelector}
           setQuerySelector={setCellsQuerySelector}
         />
-        
-        <Space pt={32} />
+
+        <Space pt={16} />
         <Switch
           label="Strip HTML tags from cells"
           size="md"
@@ -114,7 +109,6 @@ export const HtmlExtractor = (props: HtmlExtractorProps) => {
             setEntriesTrimSpaces(event.currentTarget.checked)
           }
         />
-      </Card.Section>
-    </Card>
+    </PipelineNodeCard>
   );
 };

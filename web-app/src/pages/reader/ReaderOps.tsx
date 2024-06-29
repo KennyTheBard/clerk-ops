@@ -1,6 +1,6 @@
 import { Button, Stack, Textarea, Title } from "@mantine/core";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { CellGrid, HtmlExtractor } from "../../components";
+import { CellGrid, HtmlExtractorCard } from "../../components";
 import {
   buildHtmlExtractorFn,
   HtmlExtractorFnProps,
@@ -10,6 +10,7 @@ import { createRawSchema, insertBulkRawEntry } from "../../db/repositories";
 import { db } from "../../db/init";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Id } from "../../db/entries";
+import { StripHtmlCard, TrimSpacesCard } from "../../components/PipelineNode/processing";
 
 export const ReaderOpsPage = () => {
   const ref = useRef<HTMLTextAreaElement | null>(null);
@@ -81,11 +82,13 @@ export const ReaderOpsPage = () => {
         rows={16}
         resize="vertical"
       />
-      <HtmlExtractor
+      <HtmlExtractorCard
         setExtractorFnProps={(props) => {
           setHtmlExtractorFnProps(props);
         }}
       />
+      <StripHtmlCard/>
+      <TrimSpacesCard/>
       <Button variant="filled" onClick={onClickExtract}>
         Extract
       </Button>
