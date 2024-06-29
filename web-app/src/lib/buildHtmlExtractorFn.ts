@@ -1,3 +1,5 @@
+import { stripHtmlFn, trimSpacesFn } from "./textManipulation";
+
 export type HtmlExtractorFnProps = {
   headers: {
     querySelector: string;
@@ -24,10 +26,7 @@ export const buildHtmlExtractorFn =
     const document = parser.parseFromString(content, "text/html");
     const headers = getHeaders(document, props.headers);
 
-    if (
-      !props.entries.rowsQuerySelector ||
-      !props.entries.cellsQuerySelector
-    ) {
+    if (!props.entries.rowsQuerySelector || !props.entries.cellsQuerySelector) {
       return {
         headers: [],
         rows: [],
@@ -42,16 +41,17 @@ export const buildHtmlExtractorFn =
         rowElement.querySelectorAll(props.entries.cellsQuerySelector)
       );
       const row: Record<string, string> = {};
-      for (const index in valueElements) {
+      for (let index = 0; index < valueElements.length; index++) {
         if (!headers[index]) {
-          headers[index] = `field_${index + 1}`;
+          headers[index] = getDefaultHeaderName(index);
         }
         const fieldName = headers[index];
-        row[fieldName] = props.entries.stripHtml
-          ? valueElements[index].textContent ?? ""
-          : valueElements[index].innerHTML;
+        row[fieldName] = valueElements[index].innerHTML;
+        if (props.entries.stripHtml) {
+          row[fieldName] = stripHtmlFn(valueElements[index].innerHTML);
+        }
         if (props.entries.trimSpaces) {
-          row[fieldName] = trimSpaces(row[fieldName]);
+          row[fieldName] = trimSpacesFn(row[fieldName]);
         }
       }
       rows.push(row);
@@ -73,8 +73,12 @@ const getHeaders = (
     document.querySelectorAll(headersProps.querySelector)
   );
   return headerElements
-    .map((e) => (headersProps.stripHtml ? e.textContent ?? "" : e.innerHTML))
-    .map((e) => (headersProps.trimSpaces ? trimSpaces(e) : e));
+    .map((element) => element.innerHTML)
+    .map((header) => (headersProps.stripHtml ? stripHtmlFn(header) : header))
+    .map((header) => (headersProps.trimSpaces ? trimSpacesFn(header) : header))
+    .map((header, index) =>
+      !!header?.length ? header : getDefaultHeaderName(index)
+    );
 };
 
-const trimSpaces = (s: string): string => s.replace(/\s+/g, " ").trim();
+const getDefaultHeaderName = (index: number): string => `field_${index + 1}`;

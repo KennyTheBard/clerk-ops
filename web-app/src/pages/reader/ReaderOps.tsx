@@ -5,12 +5,12 @@ import {
   buildHtmlExtractorFn,
   HtmlExtractorFnProps,
 } from "../../lib/buildHtmlExtractorFn";
-import { prettifyHtml } from "../../lib/prettifyHtml";
 import { createRawSchema, insertBulkRawEntry } from "../../db/repositories";
 import { db } from "../../db/init";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Id } from "../../db/entries";
+import { FieldSchema, Id } from "../../db/entries";
 import { StripHtmlCard, TrimSpacesCard } from "../../components/PipelineNode/processing";
+import { prettifyHtmlFn } from "../../lib/textManipulation";
 
 export const ReaderOpsPage = () => {
   const ref = useRef<HTMLTextAreaElement | null>(null);
@@ -36,14 +36,15 @@ export const ReaderOpsPage = () => {
       const id = await createRawSchema({
         name: `raw_test_${new Date().getTime()}`,
         schema: headers.reduce(
-          (acc, header) => ({
+          (acc, header, index) => ({
             ...acc,
             [header]: {
               type: "string",
               required: false,
+              index,
             },
           }),
-          {}
+          {} as Record<string, FieldSchema>
         ),
       });
       setRawSchemaId(id);
@@ -69,7 +70,7 @@ export const ReaderOpsPage = () => {
         variant="outline"
         onClick={async () => {
           if (ref.current) {
-            ref.current.value = await prettifyHtml(ref.current.value);
+            ref.current.value = await prettifyHtmlFn(ref.current.value);
           }
         }}
       >

@@ -16,4 +16,5 @@ export type FieldDataType = 'string' | 'number' | 'bool' | 'date';
 export type FieldSchema = {
   type: FieldDataType;
   required: boolean;
+  index: number;
 };

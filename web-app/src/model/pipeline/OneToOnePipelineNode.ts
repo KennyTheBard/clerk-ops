@@ -7,18 +7,24 @@ export type OneToOnePipelineNode = BasePipelineNode<
   PipelineNodeId
 >;
 
-export type FieldValueMapperPipelineNode<AcceptedTypes extends Array<FieldDataType>> = OneToOnePipelineNode & {
+export type FieldValueMapperPipelineNode<
+  AcceptedTypes extends Array<FieldDataType>,
+> = OneToOnePipelineNode & {
   type: "field_mapper";
   fields: string[];
   acceptedTypes: AcceptedTypes;
 };
 
 export type StripHtmlPipelineNode = FieldValueMapperPipelineNode<["string"]> & {
-  subtype: 'strip_html';
+  subtype: "strip_html";
 };
 
-export type TrimSpacesPipelineNode = FieldValueMapperPipelineNode<["string"]> & {
-    subtype: 'trim_spaces';
+export type TrimSpacesPipelineNode = FieldValueMapperPipelineNode<
+  ["string"]
+> & {
+  subtype: "trim_spaces";
 };
 
-export type OneToOnePipelineNodes = StripHtmlPipelineNode | TrimSpacesPipelineNode;
+export type OneToOnePipelineNodes =
+  | StripHtmlPipelineNode
+  | TrimSpacesPipelineNode;
