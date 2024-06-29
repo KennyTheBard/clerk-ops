@@ -5,7 +5,7 @@ export type ManyToManyPipelineNode<
   MaxOutputCount extends number,
   MinInputCount extends number,
   MaxInputCount extends number,
-> = BasePipelineNode<"many-to-many", PipelineNodeId, PipelineNodeId> & {
+> = BasePipelineNode<"many_to_many", PipelineNodeId, PipelineNodeId> & {
   minOutputCount: MinOutputCount;
   maxOutputCount: MaxOutputCount;
   minInputCount: MinInputCount;

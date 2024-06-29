@@ -1,15 +1,15 @@
 import { BasePipelineNode, PipelineNodeId } from "./BasePipelineNode";
 import { FieldDataType } from "../../db/entries";
 
-export type OneToOnePipelineNode = BasePipelineNode<
-  "one-to-one",
+export type BaseOneToOnePipelineNode = BasePipelineNode<
+  "one_to_one",
   PipelineNodeId,
   PipelineNodeId
 >;
 
 export type FieldValueMapperPipelineNode<
   AcceptedTypes extends Array<FieldDataType>,
-> = OneToOnePipelineNode & {
+> = BaseOneToOnePipelineNode & {
   type: "field_mapper";
   fields: string[];
   acceptedTypes: AcceptedTypes;
@@ -25,6 +25,6 @@ export type TrimSpacesPipelineNode = FieldValueMapperPipelineNode<
   subtype: "trim_spaces";
 };
 
-export type OneToOnePipelineNodes =
+export type OneToOnePipelineNode =
   | StripHtmlPipelineNode
   | TrimSpacesPipelineNode;
