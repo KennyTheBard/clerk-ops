@@ -28,29 +28,27 @@ export const PipelineContainer = (props: PipelineContainerProps) => {
   }, [props.pipeline]);
 
   return (
-    <Container>
-      <Stack align="flex-start" justify="flex-start" gap={0}>
+      <Stack align="flex-start" justify="flex-start" gap={0} p={20}>
         {nodes.map((node, index) => (
           <>
-            <Group justify="space-around">
-              {index > 0 && (
-                // TODO: extract this into a separate component
-                // TODO: replace margin left with something better
+            {index > 0 && (
+              // TODO: extract this into a separate component
+              // TODO: replace margin left with something better
+              <Group justify="space-around">
                 <div
                   style={{
                     backgroundColor: "cyan",
                     width: 4,
                     height: 50,
                     marginLeft: 250,
-                    boxShadow: "0 0 4px cyan"
+                    boxShadow: "0 0 4px cyan",
                   }}
                 />
-              )}
-            </Group>
+              </Group>
+            )}
             {getCardForPipelineNode(node)}
           </>
         ))}
       </Stack>
-    </Container>
   );
 };
