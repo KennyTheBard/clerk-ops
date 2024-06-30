@@ -32,8 +32,9 @@ export const ReadOpsPage = () => {
         ref.current.value
       );
       setHeaders(headers);
+      const schemaName = `raw_test_${new Date().getTime()}`;
       const id = await createRawSchema({
-        name: `raw_test_${new Date().getTime()}`,
+        name: schemaName,
         schema: headers.reduce(
           (acc, header, index) => ({
             ...acc,

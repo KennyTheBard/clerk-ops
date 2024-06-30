@@ -1,4 +1,4 @@
-import { Container, Group, Stack } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import { Pipeline, PipelineNode } from "../../model";
 import { useMemo } from "react";
 import { getCardForPipelineNode } from "./getCardForPipelineNode";
