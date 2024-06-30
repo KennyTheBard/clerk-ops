@@ -9,10 +9,9 @@ import { createRawSchema, insertBulkRawEntry } from "../../db/repositories";
 import { db } from "../../db/init";
 import { useLiveQuery } from "dexie-react-hooks";
 import { FieldSchema, Id } from "../../db/entries";
-import { StripHtmlCard, TrimSpacesCard } from "../../components/PipelineNode/processing";
 import { prettifyHtmlFn } from "../../lib/textManipulation";
 
-export const ReaderOpsPage = () => {
+export const ReadOpsPage = () => {
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const [htmlExtractorFnProps, setHtmlExtractorFnProps] = useState<
     HtmlExtractorFnProps | undefined
@@ -88,8 +87,6 @@ export const ReaderOpsPage = () => {
           setHtmlExtractorFnProps(props);
         }}
       />
-      <StripHtmlCard/>
-      <TrimSpacesCard/>
       <Button variant="filled" onClick={onClickExtract}>
         Extract
       </Button>

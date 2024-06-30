@@ -6,7 +6,7 @@ import { AppShell, Group, MantineProvider, Title } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { theme } from "./theme";
 import { ExploreOpsPage } from "./pages/explore/ExploreOps";
-import { ReaderOpsPage } from "./pages/reader/ReaderOps";
+import { ReadOpsPage } from "./pages/read/ReadOps";
 import { ProcessOpsPage } from "./pages/process/ProcessOps";
 
 const router = createBrowserRouter([
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "read",
-        element: <ReaderOpsPage />,
+        element: <ReadOpsPage />,
       },
       {
         path: "explore",

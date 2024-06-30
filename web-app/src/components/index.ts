@@ -1,2 +1,2 @@
-export * from './PipelineNode/extraction/HtmlExtractor';
+export * from './Pipeline/extraction/HtmlExtractor';
 export * from './CellGrid';

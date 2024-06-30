@@ -1,4 +1,4 @@
-import { PipelineNode } from "../../model";
+import { Pipeline } from "../../model";
 import { Id } from "./utils";
 
 export type ProcessingPipeline = {
@@ -6,6 +6,6 @@ export type ProcessingPipeline = {
     name: string;
     inputSchemas: Id[];
     outputSchemas: Id[];
-    nodes: PipelineNode[]; // TODO: define a proper type
+    pipeline: Pipeline; // TODO: define a proper type
     createdAt: Date;
 }

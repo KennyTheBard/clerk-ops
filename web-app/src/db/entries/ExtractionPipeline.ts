@@ -1,5 +1,6 @@
 import { Id } from "./utils";
 
+// TODO: leave this aside for now
 export type ExtractionPipeline = {
   id: Id;
   name: string;
