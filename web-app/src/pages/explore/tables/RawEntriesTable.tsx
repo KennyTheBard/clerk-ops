@@ -1,7 +1,10 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { Id } from "../../../db/entries";
-import { db } from "../../../db/init";
 import { CellGrid } from "../../../components";
+import {
+  getRawEntriesBySchemaId,
+  getRawSchemaById,
+} from "../../../db/repositories";
 
 export type RawEntriesTableProps = {
   rawSchemaId: Id;
@@ -9,12 +12,11 @@ export type RawEntriesTableProps = {
 
 export const RawEntriesTable = (props: RawEntriesTableProps) => {
   const rawSchema = useLiveQuery(
-    () => db.rawSchemas.get(props.rawSchemaId),
+    () => getRawSchemaById(props.rawSchemaId),
     [props.rawSchemaId]
   );
   const rawEntries = useLiveQuery(
-    () =>
-      db.rawEntries.where("rawSchemaId").equals(props.rawSchemaId).toArray(),
+    () => getRawEntriesBySchemaId(props.rawSchemaId),
     [props.rawSchemaId]
   );
 

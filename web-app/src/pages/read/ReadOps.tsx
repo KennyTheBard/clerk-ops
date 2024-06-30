@@ -5,11 +5,14 @@ import {
   buildHtmlExtractorFn,
   HtmlExtractorFnProps,
 } from "../../lib/buildHtmlExtractorFn";
-import { createRawSchema, insertBulkRawEntry } from "../../db/repositories";
-import { db } from "../../db/init";
 import { useLiveQuery } from "dexie-react-hooks";
 import { FieldSchema, Id } from "../../db/entries";
 import { prettifyHtmlFn } from "../../lib/textManipulation";
+import {
+  createRawSchema,
+  getRawEntriesBySchemaId,
+  insertBulkRawEntry,
+} from "../../db/repositories";
 
 export const ReadOpsPage = () => {
   const ref = useRef<HTMLTextAreaElement | null>(null);
@@ -19,10 +22,7 @@ export const ReadOpsPage = () => {
   const [headers, setHeaders] = useState<string[]>([]);
   const [rawSchemaId, setRawSchemaId] = useState<Id | undefined>();
   const rows = useLiveQuery(
-    () =>
-      rawSchemaId
-        ? db.rawEntries.where("rawSchemaId").equals(rawSchemaId).toArray()
-        : [],
+    () => (rawSchemaId ? getRawEntriesBySchemaId(rawSchemaId) : []),
     [rawSchemaId]
   );
 
@@ -32,7 +32,7 @@ export const ReadOpsPage = () => {
         ref.current.value
       );
       setHeaders(headers);
-      const schemaName = `raw_test_${new Date().getTime()}`;
+      const schemaName = getDefaultRawSchemaName();
       const id = await createRawSchema({
         name: schemaName,
         schema: headers.reduce(
@@ -95,3 +95,6 @@ export const ReadOpsPage = () => {
     </Stack>
   );
 };
+
+const getDefaultRawSchemaName = (): string =>
+  `raw_test_${new Date().getTime()}`;

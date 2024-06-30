@@ -1,7 +1,7 @@
 import { Accordion, Button } from "@mantine/core";
 import { Id } from "../../../db/entries";
 import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "../../../db/init";
+import { getAllRawSchemas } from "../../../db/repositories";
 
 export type ExploreOpsNavbarProps = {
   selectedRawSchemaId: Id | undefined;
@@ -12,7 +12,7 @@ export const ExploreOpsNavbar = ({
   selectedRawSchemaId,
   selectSchemaId,
 }: ExploreOpsNavbarProps) => {
-  const rawSchemas = useLiveQuery(() => db.rawSchemas.toArray(), []);
+  const rawSchemas = useLiveQuery(getAllRawSchemas, []);
 
   return (
     <Accordion transitionDuration={100} multiple={true}>

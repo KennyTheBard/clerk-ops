@@ -1,2 +1,4 @@
-export * from './raw';
-export * from './pipelines';
+export * from './rawSchema';
+export * from './rawEntry';
+export * from './processingPipelines';
+export * from './extractionPipelines';

@@ -1,6 +1,11 @@
-import { Accordion, Button } from "@mantine/core";
+import { Accordion, Button, Group } from "@mantine/core";
 import { Id } from "../../../db/entries";
-import { ProcessingPipeline } from "../../../db/entries/ProcessingPipeline";
+import { IconPlus } from "@tabler/icons-react";
+import { useLiveQuery } from "dexie-react-hooks";
+import {
+  createProcessingPipeline,
+  getAllProcessingPipelines,
+} from "../../../db/repositories";
 
 export type ExploreOpsNavbarProps = {
   selectedPipelineId: Id | undefined;
@@ -11,7 +16,7 @@ export const ProcessOpsNavbar = ({
   selectedPipelineId,
   setSelectedPipelineId,
 }: ExploreOpsNavbarProps) => {
-  const pipelines: ProcessingPipeline[] = [];
+  const pipelines = useLiveQuery(getAllProcessingPipelines, []);
 
   return (
     <Accordion transitionDuration={100} multiple={true}>
@@ -33,8 +38,22 @@ export const ProcessOpsNavbar = ({
               </Button>
             );
           })}
+          <Group justify="space-around" pt={7}>
+            <Button
+              variant="light"
+              color="gray"
+              leftSection={<IconPlus />}
+              onClick={() =>
+                createProcessingPipeline({ name: getDefaultPipelineName() })
+              }
+            >
+              New
+            </Button>
+          </Group>
         </Accordion.Panel>
       </Accordion.Item>
     </Accordion>
   );
 };
+
+const getDefaultPipelineName = (): string => `pipeline_${new Date().getTime()}`;
